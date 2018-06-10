@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.bugtamer.geolocation.util.GoogleMapConfig;
+
 
 /**
  * @author https://github.com/bugtamer
@@ -21,6 +23,8 @@ public class homeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		String googleApiKey = GoogleMapConfig.getInstance().getProperty("googleApiKey");
+		request.setAttribute("googleApiKey", googleApiKey);
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 

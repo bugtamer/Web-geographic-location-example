@@ -1,23 +1,26 @@
-function updateGUI(coords) {
-	console.log('coords', coords);
+function updateGUI( geoCoordinates ) {
+	updateMap( geoCoordinates );
+	setCaptionMap( 'You are here. We are not', geoCoordinates );
 	
-	document.getElementById("latitude").innerText  = coords.latitude;
-	document.getElementById("longitude").innerText = coords.longitude;
-	document.getElementById("accuracy").innerText  = coords.accuracy;
-	document.getElementById("timestamp").innerText = coords.timestamp;
+	document.getElementById( 'latitude'  ).innerText = geoCoordinates.latitude;
+	document.getElementById( 'longitude' ).innerText = geoCoordinates.longitude;
+	document.getElementById( 'accuracy'  ).innerText = geoCoordinates.accuracy;
+	document.getElementById( 'timestamp' ).innerText = geoCoordinates.timestamp;
 	
-	document.getElementById("serverResponse").innerText = JSON.stringify(coords);
-}
-
-
-function logError(err) {
-	document.getElementById("browserResponse").innerText = `ERROR(${err.code}): ${err.message}`;
-	console.warn(`ERROR(${err.code}): ${err.message}`);
-	console.warn('ERROR', err);
+	document.getElementById( 'serverResponse' ).innerText = JSON.stringify( geoCoordinates );
 }
 
 
 
-(function (){
-	getCurrentGeoCoords(updateGUI, logError);
+function logError( err ) {
+	let msg = `ERROR(${err.code}): ${err.message}`;
+	console.warn( msg );
+	console.warn( 'ERROR', err );
+	document.getElementById( 'browserResponse' ).innerText = msg;
+}
+
+
+
+(function () {
+	getCurrentGeolocation( updateGUI, logError );
 })();
