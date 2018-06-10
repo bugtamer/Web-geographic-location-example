@@ -19,6 +19,15 @@ function initMap() {
 
 
 
+function showMarkerList( geoCoordinatesList ) {
+	for (let i=0;   i < geoCoordinatesList.length;   i++) {
+		showMarker( geoCoordinatesList[i] );
+		console.log(i, geoCoordinatesList[i]);
+	}
+	
+}
+
+
 function convertToGoogleMapCoordinateFormat( geoCoordinates ) {
 	return {
 			lat: geoCoordinates.latitude,
@@ -28,10 +37,19 @@ function convertToGoogleMapCoordinateFormat( geoCoordinates ) {
 
 
 
-function setCaptionMap( caption, geoCoordinates ) {
+function showCaptionMap( caption, geoCoordinates ) {
 	let infoWindow = new google.maps.InfoWindow( {map: map} );
 	infoWindow.setPosition( convertToGoogleMapCoordinateFormat( geoCoordinates ) );
 	infoWindow.setContent( caption );
+}
+
+
+
+function showMarker( geoCoordinates ) {
+	let marker = new google.maps.Marker({
+		position: convertToGoogleMapCoordinateFormat( geoCoordinates ),
+		map: map
+	});
 }
 
 

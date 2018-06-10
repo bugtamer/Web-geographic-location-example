@@ -1,6 +1,7 @@
 package com.github.bugtamer.geolocation.controllers;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bugtamer.geolocation.models.GeoCoords;
+import com.github.bugtamer.geolocation.models.NearbyLocations;
+import com.github.bugtamer.geolocation.util.RandomGeolocation;
 
 
 /**
@@ -19,11 +22,14 @@ import com.github.bugtamer.geolocation.models.GeoCoords;
 public class GeolocationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		GeoCoords coords = getGeoCoords(request);
-		String    json   = parseToJson(coords);
+		GeoCoords origin = getGeoCoords(request);
+		NearbyLocations nearbyLocations = generateNearbyLocations(origin);
+		String json = parseToJson(nearbyLocations);
 		
 		response.setContentType("application/json");
 		response.getWriter().append( json ).flush();
@@ -34,8 +40,6 @@ public class GeolocationServlet extends HttpServlet {
 	// LOWER LEVEL IMPLEMENTATION DETAILS
 	
 	private GeoCoords getGeoCoords(HttpServletRequest request) {
-		GeoCoords coords = new GeoCoords();
-		
 		String lat = request.getParameter("latitude");
 		String lon = request.getParameter("longitude");
 		String acc = request.getParameter("accuracy");
@@ -46,29 +50,34 @@ public class GeolocationServlet extends HttpServlet {
 		int    accuracy  = Integer.parseInt(acc);
 		long   timestamp = Long.parseLong(ts);
 		
+		GeoCoords coords = new GeoCoords();
 		coords.setLatitude(latitude);
 		coords.setLongitude(longitude);
 		coords.setAccuracy(accuracy);
 		coords.setTimestamp(timestamp);
-		
-		System.out.println("GeolocationServlet - Coords=\t" + coords);
-		
 		return coords;
 	}
 	
 	
-	private String parseToJson(GeoCoords coords) {
+	private String parseToJson(NearbyLocations nearbyLocations) {
 		String json = "{}";
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			json = mapper.writeValueAsString(coords);
+			json = mapper.writeValueAsString(nearbyLocations);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("GeolocationServlet - JSON=\t" + json);
-		
 		return json;
+	}
+	
+	
+	private NearbyLocations generateNearbyLocations(GeoCoords coords) {
+		NearbyLocations nLocations = new NearbyLocations();
+		nLocations.setOrigin(coords);
+		for (int i = 0;   i < 3;   i++) {
+			nLocations.add( RandomGeolocation.getNearTo(coords));
+		}
+		return nLocations;
 	}
 
 }
