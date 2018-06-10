@@ -16,9 +16,10 @@ Geolocation API, Google Maps and Java EE example.
 + Java EE
   - Servlet
   - JSP
-+ Jackson
++ [Apache Tomcat 9.0.8](https://tomcat.apache.org/whichversion.html)
++ [Jackson-Databind](https://github.com/FasterXML/jackson-databind)
 
-## Dev tools
+## Dev Tools
 
 + IDEs
   - [Eclipse Java EE IDE for Web Developers (Oxygen)](https://www.eclipse.org/downloads/packages/release/Oxygen/)
@@ -26,7 +27,11 @@ Geolocation API, Google Maps and Java EE example.
 + Git
 + Maven
 
-## Additional sw
+## Additional SW
 
 + Firefox 60.0.1
 + Linux Mint 18.3
+
+## Util
+
++ [GPS coordinate _search engine_](https://maps.pixelis.es/)
